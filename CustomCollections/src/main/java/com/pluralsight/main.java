@@ -9,5 +9,6 @@ public class main {
         newList.add("Vic");
         newList.add("Mill");
         System.out.println(newList.getItems());
+
     }
 }
