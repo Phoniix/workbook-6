@@ -17,6 +17,7 @@ public class Person implements Comparable{
         if (o instanceof Person other) {
             int lastNameCompare = this.lastName.compareToIgnoreCase(other.lastName);
             if (lastNameCompare != 0) return lastNameCompare;
+
         }
         return 0;
     }
