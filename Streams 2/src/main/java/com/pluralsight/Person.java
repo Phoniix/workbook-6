@@ -2,6 +2,8 @@ package com.pluralsight;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Person {
     final String name;
@@ -39,30 +41,29 @@ public class Person {
         return allPeeps;
     }
     public static String findPersonByName  (List<Person> people, String name) {
-        for (Person person : people) {
-            if (name.toLowerCase().contains(person.getName().toLowerCase())) {
-                return person.getName();
-            }
-        }
-        return null;
+        return people.stream()
+                .filter(person -> person.getName().toLowerCase().contains(name.toLowerCase()))
+                .map(Person::getName)
+                .findFirst()
+                .orElse(null);
     }
     public static void ageComparisons (List<Person> people) {
-        int averageAge = 0;
-        int sum = 0;
-        int oldestAge = 0;
-        int youngestAge = 0;
-        for (int i = 0; i < people.size(); i++) {
-            if (i < 1) {
-                youngestAge = people.get(i).getAge();
-                oldestAge = people.get(i).getAge();
-                continue;
-            }
-            oldestAge = Math.max(oldestAge, people.get(i).getAge());
-            youngestAge = Math.min(youngestAge, people.get(i).getAge());
-            sum += people.get(i).getAge();
-            averageAge = sum / i;
-        }
-        System.out.println(averageAge + "|" + oldestAge + "|" + youngestAge);
+        double average = Double.parseDouble(String.valueOf(people.stream()
+                .mapToInt(Person::getAge)
+                .average()).replaceAll("[^A-Za-z0-9]+", "")
+                .replaceAll("[A-Za-z]+", ""))
+                / people.size();
+        int oldestMF = Integer.parseInt(String.valueOf(people.stream()
+                .mapToInt(Person::getAge)
+                .max()).replaceAll("[^A-Za-z0-9]+", "")
+                .replaceAll("[A-Za-z]+", "")
+        );
+        int theChild = Integer.parseInt(String.valueOf(people.stream()
+                .mapToInt(Person::getAge)
+                .min()).replaceAll("[^A-Za-z0-9]+", "")
+                .replaceAll("[A-Za-z]+", "")
+        );
+        System.out.println(average + "|" + oldestMF + "|" + theChild);
     }
 
 
